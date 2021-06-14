@@ -1,19 +1,37 @@
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
-import '../node_modules/@fortawesome/fontawesome-free/css/all.css'
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 function App() {
-  const songs = [
-    { "id": 1, "category": "game", "name": "Mario Castle", "url": "files/mario/songs/castle.mp3" },
-    { "id": 2, "category": "game", "name": "Mario Star", "url": "files/mario/songs/hurry-starman.mp3" },
-    { "id": 3, "category": "game", "name": "Mario Overworld", "url": "files/mario/songs/overworld.mp3" }
-  ];
+
   const audioRef = useRef();
   const sourceRef = useRef();
   const [currentSong, changeSong] = useState(0);
-
+  // const [percentageCurrentSong, setPercentageCurrentSong] = useState(0);
   const [playText, setPlaytext] = useState("fas fa-play");
+  const [songs, setSongs] = useState([
+    { "id": 1, "category": "game", "name": "Mario Castle", "url": "files/mario/songs/castle.mp3" }]);
+
+  const getSongs = async () => {
+    try {
+      const response = await fetch('https://assets.breatheco.de/apis/sound/songs');
+      if (response.ok) {
+        const data = await response.json();
+        setSongs(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // setInterval(() => {
+  //   if (audioRef.current !== undefined) {
+  //     setPercentageCurrentSong(Math.floor((100 / audioRef.current.duration) * audioRef.current.currentTime));
+  //     console.log(percentageCurrentSong);
+  //   }
+  // }, 1000);
+
+  useEffect(() => {
+    getSongs();
+  }, [])
 
   function previousSong() {
     if (currentSong <= 0) {
@@ -65,33 +83,36 @@ function App() {
   return (
     <div className="container">
       <div className="row d-flex justify-content-center mt-5">
-        <div className="col-6">
+        <div className="col-12 col-md-6">
           <ul className="list-group list-group-striped">
-            {songs.map((song, i) =>
-              <li onClick={() => changSongWithIndex(i)} className={"list-group-item " + (currentSong === i ? "list-group-item-primary" : "list-group-item-dark")} key={song.id}>{song.id + ". " + song.name}</li>
-            )}
+            {songs.length > 0 ? songs.map((song, i) =>
+              <li onClick={() => changSongWithIndex(i)} className={"list-group-item list-group-item-action " + (currentSong === i ? "list-group-item-primary" : "list-group-item-dark")} key={i}>{song.id + ". " + song.name}</li>
+            ) : ""}
           </ul>
         </div>
       </div>
       <div className="row d-flex justify-content-center mt-5">
-
-        <div className="col-3 d-flex justify-content-between">
+        <div className="col-10 progress mb-5">
+          <div className="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+          <style>{".progress-bar {width: 50%}"}</style>
+        </div>
+        <div className="col-10 col-md-3 d-flex justify-content-between">
           <div onClick={previousSong}>
-          <i className="fas fa-backward fa-2x"></i>
+            <i className="fas fa-backward fa-2x"></i>
           </div>
           <div onClick={play}>
-          <i className={playText + " fa-2x"}></i>
+            <i className={playText + " fa-2x"}></i>
           </div>
           <div onClick={nextSong}>
-          <i className="fas fa-forward fa-2x"></i>
+            <i className="fas fa-forward fa-2x"></i>
           </div>
         </div>
-        <audio ref={audioRef} className="col-5">
+        <audio ref={audioRef} className="col-12 col-md-5">
           <source ref={sourceRef} src={"https://assets.breatheco.de/apis/sound/" + songs[currentSong].url} type="audio/ogg" />
         </audio>
       </div>
-      </div>
-      );
+    </div>
+  );
 }
 
-      export default App;
+export default App;

@@ -1,3 +1,10 @@
+.list-group{
+  max-height: 500px;
+  margin-bottom: 10px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
