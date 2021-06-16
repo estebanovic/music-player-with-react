@@ -1,3 +1,11 @@
+body{
+  background: rgb(49, 49, 49);
+}
+
+i{
+  color: white;
+}
+
 .App {
   text-align: center;
 }

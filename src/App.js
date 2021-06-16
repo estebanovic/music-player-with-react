@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import './App.css';
 
 function App() {
 
@@ -92,10 +93,10 @@ function App() {
         </div>
       </div>
       <div className="row d-flex justify-content-center mt-5">
-        <div className="col-10 progress mb-5">
+        {/* <div className="col-10 progress mb-5">
           <div className="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
           <style>{".progress-bar {width: 50%}"}</style>
-        </div>
+        </div> */}
         <div className="col-10 col-md-3 d-flex justify-content-between">
           <div onClick={previousSong}>
             <i className="fas fa-backward fa-2x"></i>
